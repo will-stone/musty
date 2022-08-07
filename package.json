@@ -1,0 +1,23 @@
+{
+  "name": "musty",
+  "version": "0.0.1",
+  "private": false,
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "musty": "index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cli-table": "^0.3.11",
+    "execa": "^6.1.0",
+    "read-pkg-up": "^9.1.0",
+    "yoctocolors": "^1.0.0"
+  }
+}
