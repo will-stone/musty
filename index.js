@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { execa } from "execa";
 import { readPackageUp } from "read-pkg-up";
 import { red, bold } from "yoctocolors";
