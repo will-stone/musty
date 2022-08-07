@@ -1,12 +1,12 @@
 {
   "name": "musty",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": false,
   "description": "",
   "type": "module",
   "main": "index.js",
   "bin": {
-    "musty": "index.js"
+    "musty": "./index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
