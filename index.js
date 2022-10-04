@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 import { execa } from "execa";
 import { readPackageUp } from "read-pkg-up";
-import { red, bold } from "yoctocolors";
 import Table from "cli-table";
+import { red } from "yoctocolors";
+
+console.time("Done");
 
 const units = [
   { unit: "year", ms: 31536000000 },
@@ -32,8 +34,6 @@ function relativeTimeFromDate(date) {
   return "";
 }
 
-const redBold = (string) => red(bold(string));
-
 const table = new Table({
   head: ["Name", "Last Modified"],
 });
@@ -41,13 +41,17 @@ const table = new Table({
 const { packageJson } = await readPackageUp();
 
 const getTimeModified = async (packageName) => {
-  const { stdout: timeModified } = await execa("npm", [
-    "view",
-    packageName,
-    "time.modified",
-  ]);
+  try {
+    const { stdout: timeModified } = await execa("npm", [
+      "view",
+      packageName,
+      "time.modified",
+    ]);
+    return [packageName, relativeTimeFromDate(new Date(timeModified))];
+  } catch {
+    return [packageName, red('Failed')];
 
-  return [packageName, relativeTimeFromDate(new Date(timeModified))];
+  }
 };
 
 const devDependencies = await Promise.all(
@@ -57,13 +61,11 @@ const devDependencies = await Promise.all(
 );
 
 const dependencies = await Promise.all(
-  Object.keys(packageJson.dependencies || {}).map((packageName) =>
-    getTimeModified(packageName)
-  )
+  Object.keys(packageJson.dependencies || {}).map(getTimeModified)
 );
-
-// console.log(redBold("TESTING"));
 
 table.push(...dependencies);
 
 console.log(table.toString());
+
+console.timeEnd("Done");
