@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-import { execa } from "execa";
 import { readPackageUp } from "read-pkg-up";
 import Table from "cli-table";
-import { red } from "yoctocolors";
+import pc from "picocolors";
+import { execa } from "execa";
 
 console.time("Done");
 
@@ -23,7 +23,7 @@ function relativeTimeFromDate(date) {
   }
 
   const now = new Date();
-  const elapsed = date.getTime() - now.getTime();
+  const elapsed = new Date(date.trim()).getTime() - now.getTime();
 
   for (const { unit, ms } of units) {
     if (Math.abs(elapsed) >= ms || unit === "second") {
@@ -47,21 +47,20 @@ const getTimeModified = async (packageName) => {
       packageName,
       "time.modified",
     ]);
-    return [packageName, relativeTimeFromDate(new Date(timeModified))];
+    return [packageName, relativeTimeFromDate(timeModified)];
   } catch {
-    return [packageName, red('Failed')];
-
+    return [packageName, pc.red("Failed")];
   }
 };
 
 const devDependencies = await Promise.all(
-  Object.keys(packageJson.devDependencies || {}).map((packageName) =>
-    getTimeModified(packageName)
-  )
+  Object.keys(packageJson.devDependencies || {}).map(getTimeModified)
 );
 
 const dependencies = await Promise.all(
-  Object.keys(packageJson.dependencies || {}).map(getTimeModified)
+  Object.keys(packageJson.dependencies || {}).map((packageName) =>
+    getTimeModified(packageName)
+  )
 );
 
 table.push(...dependencies);

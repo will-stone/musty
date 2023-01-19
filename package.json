@@ -17,6 +17,6 @@
     "cli-table": "^0.3.11",
     "execa": "^6.1.0",
     "read-pkg-up": "^9.1.0",
-    "yoctocolors": "^1.0.0"
+    "picocolors": "^1.0.0"
   }
 }
